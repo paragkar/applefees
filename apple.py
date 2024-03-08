@@ -30,11 +30,11 @@ def safe_ratio(fee, revenue):
 st.title("Apple's Service Charge Analysis Tool")
 st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
 
-# Sidebar: User input for d value and display equations
+# Sidebar: User input for d value and display equations using markdown for better alignment
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
-st.sidebar.write("Equations used in the analysis:")
-st.sidebar.latex(r"f(r) = 0.3 \times r")
-st.sidebar.latex(r"f(r, d) = (d - 1) \times 0.543 + 0.2 \times r")
+st.sidebar.markdown("Equations used in the analysis:")
+st.sidebar.markdown(r"$f(r) = 0.3 \times r$")
+st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$")
 
 # Set the range of Revenue values
 r_values = np.linspace(0, 1000, 1000)
