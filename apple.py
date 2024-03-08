@@ -19,8 +19,11 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 def f_r(r):
     return r * 0.3
 
-def f_r_d(r, d):
-    return (d - 1) * 0.543 + r * 0.2
+def f_r_d(r, d, third_party_store):
+    if third_party_store == 'Yes':
+        return (d - 1) * 0.543
+    else:
+        return (d - 1) * 0.543 + r * 0.2
 
 # Safely compute the fee ratio to avoid division by zero
 def safe_ratio(fee, revenue):
@@ -30,22 +33,26 @@ def safe_ratio(fee, revenue):
 st.title("Apple's Service Charge Analysis Tool")
 st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
 
-# Sidebar: User inputs for d value and max revenue, and display equations with color indication
+# Sidebar: User inputs
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
 max_revenue = st.sidebar.number_input('Enter the maximum yearly revenue (in millions):', min_value=100.0, value=1000.0, step=100.0)
+third_party_store = st.sidebar.selectbox('3rd Party Store:', ['No', 'Yes'])
 st.sidebar.markdown("Equations used in the analysis:")
 st.sidebar.markdown(r"$f(r) = 0.3 \times r$ (blue line)")
-st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
+if third_party_store == 'Yes':
+    st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543$ (red line, 3rd party store impact)")
+else:
+    st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
 
-# Set the range of Revenue values based on max revenue
+# Set the range of Revenue values
 r_values = np.linspace(0, max_revenue, 1000)
 
 # Initialize figure
 fig = go.Figure()
 
-# Calculate and add traces for f(r) and f(r, d) with custom hover information
+# Calculate f(r) and f(r, d) values considering the 3rd party store selection
 f_r_values = f_r(r_values)
-f_r_d_values = f_r_d(r_values, d_value)
+f_r_d_values = f_r_d(r_values, d_value, third_party_store)
 
 # Add f(r) trace in blue
 fig.add_trace(go.Scatter(
@@ -56,13 +63,13 @@ fig.add_trace(go.Scatter(
     text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r(r):.2f}M, Fee Ratio: {safe_ratio(f_r(r), r):.2%}" for r in r_values]
 ))
 
-# Add f(r, d) trace in red
+# Add f(r, d) trace considering 3rd party store impact in red
 fig.add_trace(go.Scatter(
     x=r_values, y=f_r_d_values, mode='lines+markers',
     name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Year',
     line=dict(color='red'),
     hoverinfo='text',
-    text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value), r):.2%}" for r in r_values]
+    text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value, third_party_store):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value, third_party_store), r):.2%}" for r in r_values]
 ))
 
 # Check for intersection and update lines
@@ -86,4 +93,3 @@ fig.update_layout(
 
 # Display the figure
 st.plotly_chart(fig)
-
