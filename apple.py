@@ -2,11 +2,10 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 
-# 1. Function definitions (Apples Current Service Fees)
+# Function definitions
 def f_r(r):
     return r * 0.3
 
-# 2. Function definitions (Apples EU DMA Service Fees)
 def f_r_d(r, d):
     return (d - 1) * 0.543 + r * 0.2
 
@@ -15,10 +14,19 @@ r_values = np.linspace(0, 1000, 100)
 
 # Streamlit app
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool allows you to compare Apple's current yearly service charges against a proposed DMA model under different download scenarios.")
+st.write("This tool allows you to compare Apple's current yearly service charges against a proposed model under different download scenarios.")
 
 # User input for d value
 d_value = st.number_input('Enter the yearly download value (in millions):', min_value=1.0, value=100.0, step=1.0)
+
+# Calculate metrics for the last revenue point (max revenue) for display purposes
+max_revenue = r_values[-1]
+current_fee_ratio = f_r(max_revenue) / max_revenue
+proposed_fee_ratio = f_r_d(max_revenue, d_value) / max_revenue
+
+# Display the metrics
+st.metric(label="Current Model Fee Ratio at Max Revenue", value=f"{current_fee_ratio:.2%}")
+st.metric(label="Proposed Model Fee Ratio at Max Revenue with Downloads = {} Million/Year".format(d_value), value=f"{proposed_fee_ratio:.2%}")
 
 # Initialize figure
 fig = go.Figure()
