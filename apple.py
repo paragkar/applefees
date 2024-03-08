@@ -42,8 +42,10 @@ r_values = np.linspace(0, 1000, 1000)
 # Initialize figure
 fig = go.Figure()
 
-# Calculate and add traces for f(r) and f(r, d) with custom hover information
+# Calculate f(r) and f(r, d) values
 f_r_values = f_r(r_values)
+f_r_d_values = f_r_d(r_values, d_value)  # Ensure this is defined before using
+
 # Add f(r) trace in blue
 fig.add_trace(go.Scatter(
     x=r_values, y=f_r_values, mode='lines+markers',
