@@ -2,6 +2,21 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 
+
+#Set page layout here
+st.set_page_config(layout="wide")
+
+# Hide Streamlit style
+hide_st_style = '''
+                <style>
+                #MainMenu {visibility : hidden;}
+                footer {visibility : hidder;}
+                header {visibility :hidden;}
+                <style>
+                '''
+st.markdown(hide_st_style, unsafe_allow_html =True)
+
+
 # Function definitions
 def f_r(r):
     return r * 0.3
