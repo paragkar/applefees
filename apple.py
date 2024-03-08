@@ -28,7 +28,11 @@ def safe_ratio(fee, revenue):
 
 # Streamlit app initialization and configuration
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
+st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point. Below are the equations used for the calculations:")
+
+# Display the equations
+st.latex(r"f(r) = 0.3 \times r")
+st.latex(r"f(r, d) = (d - 1) \times 0.543 + 0.2 \times r")
 
 # User input for d value through sidebar
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
@@ -60,7 +64,7 @@ fig.add_trace(go.Scatter(
     text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value), r):.2%}" for r in r_values]
 ))
 
-# Intersection point and drawing lines logic
+# Check for intersection and update lines
 for i in range(1, len(r_values)):
     if f_r_values[i-1] < f_r_d_values[i-1] and f_r_values[i] > f_r_d_values[i] or f_r_values[i-1] > f_r_d_values[i-1] and f_r_values[i] < f_r_d_values[i]:
         intersection_x = r_values[i]
