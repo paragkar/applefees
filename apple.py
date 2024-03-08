@@ -28,7 +28,7 @@ def safe_ratio(fee, revenue):
 
 # Streamlit app initialization and configuration
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point. Black lines from the intersection point, if any, are drawn to the axes.")
+st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point. Lines from the intersection point, if present, are drawn to the axes.")
 
 # User input for d value through sidebar
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
@@ -39,7 +39,7 @@ r_values = np.linspace(0, 1000, 1000)
 # Initialize figure
 fig = go.Figure()
 
-# Calculate and add traces for f(r) and f(r, d) with custom hover information avoiding division by zero
+# Calculate and add traces for f(r) and f(r, d) with custom hover information
 f_r_values = f_r(r_values)
 f_r_d_values = f_r_d(r_values, d_value)
 
@@ -58,12 +58,19 @@ fig.add_trace(go.Scatter(
     text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value), r):.2%}" for r in r_values]
 ))
 
-# Determine intersection point and draw black lines
+# Check for intersection and update lines
+intersection_found = False
 for r, fr, frd in zip(r_values, f_r_values, f_r_d_values):
     if np.isclose(fr, frd, atol=0.01):
+        intersection_found = True
+        # Draw black lines from intersection to axes
         fig.add_shape(type="line", x0=r, y0=0, x1=r, y1=fr, line=dict(color="Black", width=2))
         fig.add_shape(type="line", x0=0, y0=fr, x1=r, y1=fr, line=dict(color="Black", width=2))
         break
+
+# If no intersection, inform the user
+if not intersection_found:
+    st.warning("No intersection found within the current revenue range for the selected download value.")
 
 # Update layout with axis titles
 fig.update_layout(
