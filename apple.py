@@ -15,7 +15,7 @@ r_values = np.linspace(0, 1000, 100)
 
 # Streamlit app
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool allows you to compare Apple's current yearly service charges against a proposed model under different download scenarios.")
+st.write("This tool allows you to compare Apple's current yearly service charges against a proposed DMA model under different download scenarios.")
 
 # User input for d value
 d_value = st.number_input('Enter the yearly download value (in millions):', min_value=1.0, value=100.0, step=1.0)
