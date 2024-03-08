@@ -19,9 +19,10 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 def f_r(r):
     return r * 0.3
 
+# Adjusted to ensure it always returns an array
 def f_r_d(r, d, third_party_store):
     if third_party_store == 'Yes':
-        return (d - 1) * 0.543
+        return np.full_like(r, (d - 1) * 0.543)  # Return a constant array
     else:
         return (d - 1) * 0.543 + r * 0.2
 
@@ -31,7 +32,7 @@ def safe_ratio(fee, revenue):
 
 # Streamlit app initialization and configuration
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
+st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios.")
 
 # Sidebar: User inputs
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
@@ -44,13 +45,13 @@ if third_party_store == 'Yes':
 else:
     st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
 
-# Set the range of Revenue values
+# Set the range of Revenue values based on max revenue
 r_values = np.linspace(0, max_revenue, 1000)
 
 # Initialize figure
 fig = go.Figure()
 
-# Calculate f(r) and f(r, d) values considering the 3rd party store selection
+# Calculate f(r) and f(r, d) values
 f_r_values = f_r(r_values)
 f_r_d_values = f_r_d(r_values, d_value, third_party_store)
 
