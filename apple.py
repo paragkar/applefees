@@ -14,7 +14,7 @@ r_values = np.linspace(0, 1000, 100)
 
 # Streamlit app
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point, and lines from the intersection point are drawn to the axes.")
+st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point. If an intersection exists, black lines from that point to the axes are drawn.")
 
 # User input for d value
 d_value = st.number_input('Enter the yearly download value (in millions):', min_value=1.0, value=100.0, step=1.0)
@@ -22,26 +22,32 @@ d_value = st.number_input('Enter the yearly download value (in millions):', min_
 # Initialize figure
 fig = go.Figure()
 
+# Generate service fee data
+f_r_values = f_r(r_values)
+f_r_d_values = [f_r_d(r, d_value) for r in r_values]
+
 # Add trace for f(r) with custom hover information
-fig.add_trace(go.Scatter(x=r_values, y=f_r(r_values), mode='lines+markers',
+fig.add_trace(go.Scatter(x=r_values, y=f_r_values, mode='lines+markers',
                          name='Current Model (f(r))',
                          line=dict(dash='dot'),
                          hoverinfo='text',
-                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r(r):.2f}M, Fee Ratio: {f_r(r)/r:.2%}" for r in r_values]))
+                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${fee:.2f}M, Fee Ratio: {fee/r:.2%}" for r, fee in zip(r_values, f_r_values)]))
 
 # Add traces for f(r, d) using the user-provided d value with custom hover information
-fig.add_trace(go.Scatter(x=r_values, y=f_r_d(r_values, d_value), mode='lines+markers',
+fig.add_trace(go.Scatter(x=r_values, y=f_r_d_values, mode='lines+markers',
                          name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Year',
                          hoverinfo='text',
-                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value):.2f}M, Fee Ratio: {f_r_d(r, d_value)/r:.2%}" for r in r_values]))
+                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${fee:.2f}M, Fee Ratio: {fee/r:.2%}" for r, fee in zip(r_values, f_r_d_values)]))
 
-# Find the intersection point
-intersection_x = (0.543 * (d_value - 1)) / 0.1
-intersection_y = f_r(intersection_x)
-
-# Draw vertical and horizontal lines from the intersection
-fig.add_shape(type="line", x0=intersection_x, y0=0, x1=intersection_x, y1=intersection_y, line=dict(color="RoyalBlue", width=2, dash="dot"))
-fig.add_shape(type="line", x0=0, y0=intersection_y, x1=intersection_x, y1=intersection_y, line=dict(color="RoyalBlue", width=2, dash="dot"))
+# Check for intersection point - only draw lines if intersection exists
+for r, fee_r, fee_r_d in zip(r_values, f_r_values, f_r_d_values):
+    if np.isclose(fee_r, fee_r_d, atol=0.01):
+        intersection_x = r
+        intersection_y = fee_r
+        # Draw black lines from the intersection
+        fig.add_shape(type="line", x0=intersection_x, y0=0, x1=intersection_x, y1=intersection_y, line=dict(color="Black", width=2))
+        fig.add_shape(type="line", x0=0, y0=intersection_y, x1=intersection_x, y1=intersection_y, line=dict(color="Black", width=2))
+        break
 
 # Update layout with axis titles
 fig.update_layout(
