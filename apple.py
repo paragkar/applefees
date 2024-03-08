@@ -29,7 +29,7 @@ st.title("Apple's Service Charge Analysis Tool")
 st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point. Black lines from the intersection point, if any, are drawn to the axes.")
 
 # User input for d value
-d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1)
+d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
 
 # Set the range of Revenue values
 r_values = np.linspace(0, 1000, 1000)
