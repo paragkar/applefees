@@ -2,10 +2,11 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 
-# Function definitions
+# 1. Function definitions (Apples Current Service Fees)
 def f_r(r):
     return r * 0.3
 
+# 2. Function definitions (Apples EU DMA Service Fees)
 def f_r_d(r, d):
     return (d - 1) * 0.543 + r * 0.2
 
