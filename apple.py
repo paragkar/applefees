@@ -14,28 +14,26 @@ r_values = np.linspace(0, 1000, 100)
 
 # Streamlit app
 st.title("Apple's Service Charge Analysis Tool")
-st.write("This tool allows you to compare Apple's current yearly service charges against a proposed model under different download scenarios.")
+st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
 
 # User input for d value
 d_value = st.number_input('Enter the yearly download value (in millions):', min_value=1.0, value=100.0, step=1.0)
 
-# Calculate metrics for the last revenue point (max revenue) for display purposes
-max_revenue = r_values[-1]
-current_fee_ratio = f_r(max_revenue) / max_revenue
-proposed_fee_ratio = f_r_d(max_revenue, d_value) / max_revenue
-
-# Display the metrics
-st.metric(label="Current Model Fee Ratio at Max Revenue", value=f"{current_fee_ratio:.2%}")
-st.metric(label="Proposed Model Fee Ratio at Max Revenue with Downloads = {} Million/Year".format(d_value), value=f"{proposed_fee_ratio:.2%}")
-
 # Initialize figure
 fig = go.Figure()
 
-# Add trace for f(r) with a dotted line
-fig.add_trace(go.Scatter(x=r_values, y=f_r(r_values), mode='lines', name='Current Model (f(r))', line=dict(dash='dot')))
+# Add trace for f(r) with custom hover information
+fig.add_trace(go.Scatter(x=r_values, y=f_r(r_values), mode='lines+markers',
+                         name='Current Model (f(r))',
+                         line=dict(dash='dot'),
+                         hoverinfo='text',
+                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r(r):.2f}M, Fee Ratio: {f_r(r)/r:.2%}" for r in r_values]))
 
-# Add traces for f(r, d) using the user-provided d value
-fig.add_trace(go.Scatter(x=r_values, y=f_r_d(r_values, d_value), mode='lines', name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Year'))
+# Add traces for f(r, d) using the user-provided d value with custom hover information
+fig.add_trace(go.Scatter(x=r_values, y=f_r_d(r_values, d_value), mode='lines+markers',
+                         name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Year',
+                         hoverinfo='text',
+                         text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value):.2f}M, Fee Ratio: {f_r_d(r, d_value)/r:.2%}" for r in r_values]))
 
 # Update layout with axis titles
 fig.update_layout(
