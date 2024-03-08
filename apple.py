@@ -1,4 +1,4 @@
-import numpy as np
+iimport numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -83,4 +83,3 @@ fig.update_layout(
 
 # Display the figure
 st.plotly_chart(fig)
-
