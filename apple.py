@@ -30,21 +30,22 @@ def safe_ratio(fee, revenue):
 st.title("Apple's Service Charge Analysis Tool")
 st.write("This tool visualizes and compares Apple's current yearly service charges against a proposed model under different download scenarios. The tooltips provide dynamic insights into the service fee ratio at each revenue point.")
 
-# Sidebar: User input for d value and display equations with color indication
+# Sidebar: User inputs for d value and max revenue, and display equations with color indication
 d_value = st.sidebar.number_input('Enter the yearly download value (in millions):', min_value=0.0, value=100.0, step=1.0)
+max_revenue = st.sidebar.number_input('Enter the maximum yearly revenue (in millions):', min_value=100.0, value=1000.0, step=100.0)
 st.sidebar.markdown("Equations used in the analysis:")
 st.sidebar.markdown(r"$f(r) = 0.3 \times r$ (blue line)")
 st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
 
-# Set the range of Revenue values
-r_values = np.linspace(0, 1000, 1000)
+# Set the range of Revenue values based on max revenue
+r_values = np.linspace(0, max_revenue, 1000)
 
 # Initialize figure
 fig = go.Figure()
 
-# Calculate f(r) and f(r, d) values
+# Calculate and add traces for f(r) and f(r, d) with custom hover information
 f_r_values = f_r(r_values)
-f_r_d_values = f_r_d(r_values, d_value)  # Ensure this is defined before using
+f_r_d_values = f_r_d(r_values, d_value)
 
 # Add f(r) trace in blue
 fig.add_trace(go.Scatter(
@@ -85,3 +86,4 @@ fig.update_layout(
 
 # Display the figure
 st.plotly_chart(fig)
+
