@@ -46,7 +46,7 @@ else:
     st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
 
 # Set the range of Revenue values based on max revenue
-r_values = np.linspace(0, max_revenue, 1000)
+r_values = np.linspace(0, max_revenue, 200)
 
 # Initialize figure
 fig = go.Figure()
