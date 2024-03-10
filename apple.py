@@ -46,7 +46,7 @@ st.sidebar.markdown("Equations used in the analysis:")
 st.sidebar.markdown(r"$f(r) = 0.3 \times r$ (blue line)")
 
 if app_store_small_business_program == 'Yes':
-    rate = 0.15
+    rate = 0.13
 else:
     rate = 0.2
 
