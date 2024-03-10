@@ -37,7 +37,7 @@ st.write("This tool visualizes and compares Apple's current Monthly service char
 
 # Sidebar: User inputs
 d_value = st.sidebar.number_input('Enter the Monthly download value (in Millions):', min_value=0.0, value=2.0, step=0.5)
-max_revenue = st.sidebar.number_input('Enter the Maximum Monthly Revenue (in Millions):', min_value=1.0, value=10.0, step=5.0)
+max_revenue = st.sidebar.number_input('Enter the Maximum Yearly Revenue (in Millions):', min_value=1.0, value=10.0, step=5.0)
 app_store_small_business_program = st.sidebar.selectbox('App Store Small Business Program:', ['No', 'Yes'])
 alternate_payment_processing = st.sidebar.selectbox('Alternate Payment Processing:', ['No', 'Yes'])
 third_party_store = st.sidebar.selectbox('3rd Party Store:', ['No', 'Yes'])
@@ -76,7 +76,7 @@ fig.add_trace(go.Scatter(
     name='Current Model (f(r))',
     line=dict(color='blue', dash='dot'),
     hoverinfo='text',
-    text=[f"Annual Revenue: ${r:.2f}M, Monthly Service Fee: ${f_r(r):.4f}M, Fee Ratio: {safe_ratio(f_r(r), r):.2%}" for r in r_values]
+    text=[f"Yearly Revenue: ${r:.2f}M, Monthly Service Fee: ${f_r(r):.4f}M, Fee Ratio: {safe_ratio(f_r(r), r):.2%}" for r in r_values]
 ))
 
 # Add f(r, d) trace considering 3rd party store impact in red
@@ -85,7 +85,7 @@ fig.add_trace(go.Scatter(
     name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Month',
     line=dict(color='red'),
     hoverinfo='text',
-    text=[f"Annual Revenue: ${r:.2f}M, Monthly Service Fee: ${f_r_d(r, d_value, third_party_store, rate):.4f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value, third_party_store, rate), r):.2%}" for r in r_values]
+    text=[f"Yearly Revenue: ${r:.2f}M, Monthly Service Fee: ${f_r_d(r, d_value, third_party_store, rate):.4f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value, third_party_store, rate), r):.2%}" for r in r_values]
 ))
 
 # Check for intersection and update lines
@@ -103,7 +103,7 @@ fig.update_layout(
     height=700, 
     width=1200, 
     title_text="Apple's Current vs. Proposed Service Charges",
-    xaxis_title="App Provider's Monthly Revenue ($ Million)",
+    xaxis_title="App Provider's Yearly Revenue ($ Million)",
     yaxis_title="Apple's Monthly Service Charges ($ Million)"
 )
 
