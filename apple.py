@@ -17,14 +17,14 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # Function definitions
 def f_r(r):
-    return r * 0.3
+    return r * 0.3/12
 
 # Adjusted to ensure it always returns an array
 def f_r_d(r, d, third_party_store):
     if third_party_store == 'Yes':
-        return np.full_like(r, (d - 1) * 0.543)  # Return a constant array
+        return np.full_like(r, (d - 1) * 0.543/12)  # Return a constant array
     else:
-        return ((d - 1) * 0.543 + r * 0.2)
+        return ((d - 1) * 0.543 + r * 0.2)/12
 
 # Safely compute the fee ratio to avoid division by zero
 def safe_ratio(fee, revenue):
