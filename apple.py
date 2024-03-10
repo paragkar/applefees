@@ -15,16 +15,17 @@ hide_st_style = """
                 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# Function definitions
+# Function Today's Capabilities and terms
 def f_r(r):
     return r * 0.3/12
 
+# Function new capabilities and terms
 # Adjusted to ensure it always returns an array
-def f_r_d(r, d, third_party_store):
+def f_r_d(r, d, third_party_store,rate):
     if third_party_store == 'Yes':
         return np.full_like(r, (d - 1) * 0.543/12)  # Return a constant array
     else:
-        return ((d - 1) * 0.543 + r * 0.2)/12
+        return ((d - 1) * 0.543 + r * rate)/12
 
 # Safely compute the fee ratio to avoid division by zero
 def safe_ratio(fee, revenue):
@@ -37,13 +38,20 @@ st.write("This tool visualizes and compares Apple's current Monthly service char
 # Sidebar: User inputs
 d_value = st.sidebar.number_input('Enter the Monthly download value (in Millions):', min_value=0.0, value=2.0, step=0.5)
 max_revenue = st.sidebar.number_input('Enter the Maximum Monthly Revenue (in Millions):', min_value=1.0, value=10.0, step=5.0)
+app_store_small_business_program = st.sidebar.selectbox('App Store Small Business Program:', ['No', 'Yes'])
 third_party_store = st.sidebar.selectbox('3rd Party Store:', ['No', 'Yes'])
 st.sidebar.markdown("Equations used in the analysis:")
 st.sidebar.markdown(r"$f(r) = 0.3 \times r$ (blue line)")
+
+if app_store_small_business_program == 'Yes':
+    rate = 0.15
+else:
+    rate = 0.2
+
 if third_party_store == 'Yes':
     st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543$ (red line, 3rd party store impact)")
 else:
-    st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + 0.2 \times r$ (red line)")
+    st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543 + rate \times r$ (red line)")
 
 # Set the range of Revenue values based on max revenue
 r_values = np.linspace(0, max_revenue, 200)
