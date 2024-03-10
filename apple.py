@@ -78,7 +78,7 @@ fig.add_trace(go.Scatter(
     name=f'Proposed Model (f(r, d)) with downloads={d_value} Million/Month',
     line=dict(color='red'),
     hoverinfo='text',
-    text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value, third_party_store):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value, third_party_store), r):.2%}" for r in r_values]
+    text=[f"Revenue: ${r:.2f}M, Service Fee: ${f_r_d(r, d_value, third_party_store, rate):.2f}M, Fee Ratio: {safe_ratio(f_r_d(r, d_value, third_party_store, rate), r):.2%}" for r in r_values]
 ))
 
 # Check for intersection and update lines
