@@ -35,7 +35,7 @@ st.title("Apple's Service Charge Analysis Tool")
 st.write("This tool visualizes and compares Apple's current Monthly service charges against a proposed model under different download scenarios.")
 
 # Sidebar: User inputs
-d_value = st.sidebar.number_input('Enter the Monthly download value (in Millions):', min_value=0.0, value=100.0, step=1.0)
+d_value = st.sidebar.number_input('Enter the Monthly download value (in Millions):', min_value=0.0, value=2.0, step=0.5)
 max_revenue = st.sidebar.number_input('Enter the Maximum Monthly Revenue (in Millions):', min_value=1.0, value=10.0, step=5.0)
 third_party_store = st.sidebar.selectbox('3rd Party Store:', ['No', 'Yes'])
 st.sidebar.markdown("Equations used in the analysis:")
