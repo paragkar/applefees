@@ -61,7 +61,7 @@ fig = go.Figure()
 
 # Calculate f(r) and f(r, d) values
 f_r_values = f_r(r_values)
-f_r_d_values = f_r_d(r_values, d_value, third_party_store)
+f_r_d_values = f_r_d(r_values, d_value, third_party_store, rate)
 
 # Add f(r) trace in blue
 fig.add_trace(go.Scatter(
