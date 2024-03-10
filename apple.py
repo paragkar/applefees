@@ -39,7 +39,9 @@ st.write("This tool visualizes and compares Apple's current Monthly service char
 d_value = st.sidebar.number_input('Enter the Monthly download value (in Millions):', min_value=0.0, value=2.0, step=0.5)
 max_revenue = st.sidebar.number_input('Enter the Maximum Monthly Revenue (in Millions):', min_value=1.0, value=10.0, step=5.0)
 app_store_small_business_program = st.sidebar.selectbox('App Store Small Business Program:', ['No', 'Yes'])
+alternate_payment_processing = st.sidebar.selectbox('Alternate Payment Processing:', ['No', 'Yes'])
 third_party_store = st.sidebar.selectbox('3rd Party Store:', ['No', 'Yes'])
+
 st.sidebar.markdown("Equations used in the analysis:")
 st.sidebar.markdown(r"$f(r) = 0.3 \times r$ (blue line)")
 
@@ -47,6 +49,11 @@ if app_store_small_business_program == 'Yes':
     rate = 0.15
 else:
     rate = 0.2
+
+if alternate_payment_processing == 'Yes':
+    rate = rate - 0.03
+else:
+    pass
 
 if third_party_store == 'Yes':
     st.sidebar.markdown(r"$f(r, d) = (d - 1) \times 0.543$ (red line, 3rd party store impact)")
