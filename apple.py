@@ -29,7 +29,7 @@ def f_r_d(r, d, third_party_store,rate):
 
 # Safely compute the fee ratio to avoid division by zero
 def safe_ratio(fee, revenue):
-    return fee / revenue if revenue else 0
+    return fee / (revenue/12) if revenue else 0
 
 # Streamlit app initialization and configuration
 st.title("Apple's Service Charge Analysis Tool")
